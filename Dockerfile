@@ -1,20 +1,14 @@
 FROM debian:testing
 
-# http://xecdesign.com/compiling-a-kernel/
-
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y build-essential \
+RUN apt-get install -y bc \
                        curl \
+                       gcc \
                        git \
+                       make \
                        lib32z1 \
                        lib32ncurses5 \
                        libncurses5-dev
-
-RUN touch /etc/apt/sources.list.d/crosstools.list
-RUN curl http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | apt-key add -
-
-RUN dpkg --add-architecture armhf
-RUN apt-get update
 
 WORKDIR /root
 
@@ -27,13 +21,16 @@ RUN patch -p1 -d /root/linux/ -i /root/linux-arm.patch
 
 WORKDIR /root/linux
 
-RUN make mrproper
-RUN make ARCH=arm versatile_defconfig
-# make ARCH=arm menuconfig
-ADD config /root/linux/.config
-
 ENV CCPREFIX /root/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-
+
+RUN apt-get install -y build-
+
+RUN make mrproper
+RUN make ARCH=arm CROSS_COMPILE=${CCPREFIX} versatile_defconfig
+# make ARCH=arm menuconfig
+# check http://xecdesign.com/compiling-a-kernel/
 
 # make ARCH=arm CROSS_COMPILE=${CCPREFIX}
 # make ARCH=arm CROSS_COMPILE=${CCPREFIX} INSTALL_MOD_PATH=../modules modules_install
+
 # docker cp CONTAINER:PATH HOSTPATH
