@@ -18,7 +18,6 @@ RUN git clone https://github.com/raspberrypi/tools.git
 ADD linux-arm.patch /root/linux-arm.patch
 RUN patch -p1 -d /root/linux/ -i /root/linux-arm.patch
 
-
 WORKDIR /root/linux
 
 ENV CCPREFIX /root/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-
