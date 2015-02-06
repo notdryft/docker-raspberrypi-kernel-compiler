@@ -22,8 +22,6 @@ WORKDIR /root/linux
 
 ENV CCPREFIX /root/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-
 
-RUN apt-get install -y build-
-
 RUN make mrproper
 RUN make ARCH=arm CROSS_COMPILE=${CCPREFIX} versatile_defconfig
 # make ARCH=arm menuconfig
